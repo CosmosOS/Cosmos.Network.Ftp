@@ -10,6 +10,8 @@
 
 > CosmosFTP is an FTP server made in C# for the Cosmos operating system construction kit.
 
+##### Port of a C written Epitech project: [NWP_myftp_2019](https://github.com/valentinbreiz/NWP_myftp_2019)
+
 Version 2 is for **Cosmos Gen3** kernels (NativeAOT). It is a plain .NET library over `System.Net.Sockets` and `System.IO`, which a Gen3 kernel runs on its own network stack and VFS. For Cosmos Gen2 (`Cosmos.System2`), use Cosmos.Network.Ftp 1.x.
 
 ## Usage
@@ -70,21 +72,11 @@ dotnet test Cosmos.Network.Ftp.slnx
 
 The tests run the server on the host, over loopback, against a raw FTP client.
 
-##### Port of a C written Epitech project: [NWP_myftp_2019](https://github.com/valentinbreiz/NWP_myftp_2019)
-
-## Authors
-
-👤 **[@valentinbreiz](https://github.com/valentinbreiz)**
-
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!
 
 Feel free to check [issues page](https://github.com/CosmosOS/CosmosFtp/issues). 
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
