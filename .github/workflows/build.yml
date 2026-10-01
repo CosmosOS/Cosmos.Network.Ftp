@@ -3,7 +3,9 @@
 # Trusted Publishing: no API key is stored, the publish job trades GitHub's
 # OIDC token for a short-lived nuget.org key.
 #
-# The nuget.org Trusted Publishing policy must name this file (build.yml).
+# The nuget.org Trusted Publishing policy matches on repository owner,
+# repository name, this file's name (build.yml) and, if it names one, the
+# `production` environment: renaming this file breaks publishing.
 
 name: Build
 
@@ -47,6 +49,7 @@ jobs:
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       id-token: write # lets NuGet/login request GitHub's OIDC token
     steps:
@@ -59,7 +62,11 @@ jobs:
         id: login
         uses: NuGet/login@v1
         with:
-          user: ${{ secrets.NUGET_USER }} # nuget.org profile name, not email
+          # The user who CREATED the policy, not the CosmosOS profile that owns
+          # it. nuget.org looks the policy up by creator and answers a wrong
+          # guess with "No matching trust policy owned by user 'CosmosOS' was
+          # found" (HTTP 401). Public, so not a secret.
+          user: valentinbreiz
 
       - name: Push to nuget.org
         run: dotnet nuget push "artifacts/*.nupkg" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json
