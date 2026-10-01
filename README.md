@@ -65,7 +65,7 @@ FTP sends everything in the clear, password included. Serve it on a network you 
 ## Building and testing
 
 ```sh
-dotnet test CosmosFtp.slnx
+dotnet test Cosmos.Network.Ftp.slnx
 ```
 
 The tests run the server on the host, over loopback, against a raw FTP client.
