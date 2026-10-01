@@ -420,7 +420,7 @@ internal sealed class FtpSession : IDisposable
         ClosePassiveListener();
         _activeEndPoint = null;
 
-        byte[] address = _localEndPoint.Address.MapToIPv4().GetAddressBytes();
+        byte[] address = (_server.PassiveAddress ?? _localEndPoint.Address).MapToIPv4().GetAddressBytes();
         if (_server.OpenPassiveListener() is not { } passive)
         {
             Reply(425, "No passive port is free, try again later.");

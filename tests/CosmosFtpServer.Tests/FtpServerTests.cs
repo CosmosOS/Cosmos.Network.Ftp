@@ -36,14 +36,7 @@ public class FtpServerTests
             Authenticate = static (user, password) => user != "locked" || password == Password,
         };
 
-        _thread = new Thread(_server.Listen) { IsBackground = true };
-        _thread.Start();
-        Stopwatch waited = Stopwatch.StartNew();
-        while (!_server.IsListening)
-        {
-            Assert.That(waited.ElapsedMilliseconds, Is.LessThan(5000), "the server did not start listening");
-            Thread.Sleep(10);
-        }
+        _thread = Run(_server);
     }
 
     [TearDown]
@@ -52,6 +45,21 @@ public class FtpServerTests
         _server?.Close();
         _thread?.Join(5000);
         Directory.Delete(_root, recursive: true);
+    }
+
+    /// <summary>Starts <paramref name="server"/> on a thread of its own, and returns once it listens.</summary>
+    private static Thread Run(FtpServer server)
+    {
+        Thread thread = new(server.Listen) { IsBackground = true };
+        thread.Start();
+        Stopwatch waited = Stopwatch.StartNew();
+        while (!server.IsListening)
+        {
+            Assert.That(waited.ElapsedMilliseconds, Is.LessThan(5000), "the server did not start listening");
+            Thread.Sleep(10);
+        }
+
+        return thread;
     }
 
     private static int FreePort()
@@ -230,6 +238,43 @@ public class FtpServerTests
             Assert.That(first.Send("CWD shared"), Does.StartWith("250"));
             Assert.That(first.Send("QUIT"), Does.StartWith("221"));
             Assert.That(second.Send("NOOP"), Does.StartWith("200"));
+        }
+    }
+
+    public class PassiveAddress : FtpServerTests
+    {
+        [Test]
+        public void WhenSet_PasvNamesItAndEpsvNamesNoAddress()
+        {
+            int passivePort = FreePort();
+            FtpServer server = new(_root, FreePort())
+            {
+                PassivePortMin = passivePort,
+                PassivePortMax = passivePort,
+                PassiveAddress = IPAddress.Parse("192.0.2.7"),
+            };
+            Thread thread = Run(server);
+            try
+            {
+                using FtpTestClient client = new(server.Port);
+                client.Login();
+
+                Assert.That(client.Send("PASV"), Is.EqualTo($"227 Entering Passive Mode (192,0,2,7,{passivePort >> 8},{passivePort & 0xFF})."));
+                Assert.That(client.Send("EPSV"), Is.EqualTo($"229 Entering Extended Passive Mode (|||{passivePort}|)"));
+            }
+            finally
+            {
+                server.Close();
+                thread.Join(5000);
+            }
+        }
+
+        [Test]
+        public void WhenNotIPv4_ListenThrows()
+        {
+            FtpServer server = new(_root, FreePort()) { PassiveAddress = IPAddress.IPv6Loopback };
+
+            Assert.Throws<InvalidOperationException>(server.Listen);
         }
     }
 

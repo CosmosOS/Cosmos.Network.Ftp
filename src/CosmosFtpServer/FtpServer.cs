@@ -58,6 +58,15 @@ public sealed class FtpServer : IDisposable
     public int PassivePortMax { get; init; } = DefaultPassivePortMax;
 
     /// <summary>
+    /// The IPv4 address a <c>PASV</c> reply tells the client to connect to.
+    /// Left null, it is the address the client reached the server at, as
+    /// the server sees it. A server behind NAT names the address clients
+    /// reach it at instead: 127.0.0.1 for a client on the host of a QEMU
+    /// user-mode guest. <c>EPSV</c> names no address and is not affected.
+    /// </summary>
+    public IPAddress? PassiveAddress { get; init; }
+
+    /// <summary>
     /// Decides whether a user name and password log in. Left null, any
     /// user name logs in with any password.
     /// </summary>
@@ -92,7 +101,7 @@ public sealed class FtpServer : IDisposable
     /// Serves clients on the calling thread until <see cref="Close"/> is
     /// called. The clients still connected then are disconnected.
     /// </summary>
-    /// <exception cref="InvalidOperationException">The server already listens, or the passive range is not a valid range of ports.</exception>
+    /// <exception cref="InvalidOperationException">The server already listens, the passive range is not a valid range of ports, or <see cref="PassiveAddress"/> is not an IPv4 address.</exception>
     /// <exception cref="ObjectDisposedException">The server was closed.</exception>
     /// <exception cref="SocketException">The port could not be listened on.</exception>
     public void Listen()
@@ -102,6 +111,11 @@ public sealed class FtpServer : IDisposable
         if (PassivePortMin < 1 || PassivePortMax > IPEndPoint.MaxPort || PassivePortMin > PassivePortMax)
         {
             throw new InvalidOperationException($"The passive port range {PassivePortMin}-{PassivePortMax} is not a range of TCP ports.");
+        }
+
+        if (PassiveAddress is not null && PassiveAddress.AddressFamily != AddressFamily.InterNetwork)
+        {
+            throw new InvalidOperationException($"The passive address {PassiveAddress} is not an IPv4 address, which is all a PASV reply can name.");
         }
 
         if (_listening)
