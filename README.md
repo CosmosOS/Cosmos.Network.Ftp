@@ -22,7 +22,7 @@ Add the package to your kernel .csproj:
 </ItemGroup>
 ```
 
-The kernel needs networking and storage (`CosmosEnableNetwork`, `CosmosEnableStorage`, both on by default), an IP configuration (DHCP or static) and a mounted filesystem. `Listen()` serves every client on the calling thread until `Close()` is called, so start it on a thread of its own to keep your shell:
+The kernel needs an IP configuration (DHCP or static) and a mounted filesystem. `Listen()` serves every client on the calling thread until `Close()` is called, so start it on a thread of its own to keep your shell:
 
 ```csharp
 using System.Threading;
@@ -54,13 +54,9 @@ With QEMU user-mode networking, forward the control port and every passive port 
 cosmos run --hostfwd tcp::2121-:21 --hostfwd tcp::50000-:50000 --hostfwd tcp::50001-:50001  # and so on, up to 50009
 ```
 
-## Building and testing
+## Authors
 
-```sh
-dotnet test Cosmos.Network.Ftp.slnx
-```
-
-The tests run the server on the host, over loopback, against a raw FTP client.
+👤 **[@valentinbreiz](https://github.com/valentinbreiz)**
 
 ## 🤝 Contributing
 
