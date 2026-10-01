@@ -12,8 +12,6 @@
 
 ##### Port of a C written Epitech project: [NWP_myftp_2019](https://github.com/valentinbreiz/NWP_myftp_2019)
 
-Version 2 is for **Cosmos Gen3** kernels (NativeAOT). It is a plain .NET library over `System.Net.Sockets` and `System.IO`, which a Gen3 kernel runs on its own network stack and VFS. For Cosmos Gen2 (`Cosmos.System2`), use Cosmos.Network.Ftp 1.x.
-
 ## Usage
 
 Add the package to your kernel .csproj:
@@ -44,8 +42,6 @@ new Thread(server.Listen).Start();
 server.Close();
 ```
 
-Clients see the served directory as `/` and cannot leave it. The server speaks RFC 959 with the commands common clients use: `USER`, `PASS`, `PWD`, `CWD`, `CDUP`, `LIST`, `NLST`, `RETR`, `STOR`, `APPE`, `SIZE`, `DELE`, `MKD`, `RMD`, `RNFR`/`RNTO`, `PASV`, `EPSV`, `PORT`, `EPRT`, `FEAT`, `SYST`, `TYPE`, `NOOP` and `QUIT`.
-
 ### Data connections
 
 Passive mode is the one to use. Each passive transfer listens on a port from `PassivePortMin` to `PassivePortMax` (50000 to 50009 by default). Active mode (`PORT`, `EPRT`) only connects back to the address the client is connected from, so it does not work through NAT.
@@ -57,12 +53,6 @@ With QEMU user-mode networking, forward the control port and every passive port 
 ```sh
 cosmos run --hostfwd tcp::2121-:21 --hostfwd tcp::50000-:50000 --hostfwd tcp::50001-:50001  # and so on, up to 50009
 ```
-
-A smaller range means fewer rules: `PassivePortMin = 50000, PassivePortMax = 50000` needs a single one. Then connect to `localhost:2121` in passive mode, for example `curl ftp://localhost:2121/`. A `PASV` reply names the guest's own address, 10.0.2.15, which the host cannot reach. curl and Python's `ftplib` ignore it and connect to the address they reached the server at, and `EPSV` names no address at all, but FileZilla connects where the reply says. For it, set `PassiveAddress = IPAddress.Loopback`, so that `PASV` names 127.0.0.1.
-
-### Security
-
-FTP sends everything in the clear, password included. Serve it on a network you trust.
 
 ## Building and testing
 
