@@ -56,7 +56,7 @@ With QEMU user-mode networking, forward the control port and every passive port 
 cosmos run --hostfwd tcp::2121-:21 --hostfwd tcp::50000-:50000 --hostfwd tcp::50001-:50001  # and so on, up to 50009
 ```
 
-A smaller range means fewer rules: `PassivePortMin = 50000, PassivePortMax = 50000` needs a single one. Then connect to `localhost:2121` in passive mode, for example `curl ftp://localhost:2121/`. The `PASV` reply names the guest's own address (10.0.2.15), which the host cannot reach: curl and Python's `ftplib` use the address they are connected to instead, and `EPSV` names no address at all.
+A smaller range means fewer rules: `PassivePortMin = 50000, PassivePortMax = 50000` needs a single one. Then connect to `localhost:2121` in passive mode, for example `curl ftp://localhost:2121/`. A `PASV` reply names the guest's own address, 10.0.2.15, which the host cannot reach. curl and Python's `ftplib` ignore it and connect to the address they reached the server at, and `EPSV` names no address at all, but FileZilla connects where the reply says. For it, set `PassiveAddress = IPAddress.Loopback`, so that `PASV` names 127.0.0.1.
 
 ### Security
 
