@@ -1,8 +1,8 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/CosmosFtpServer/CosmosFtpServer.csproj" />
+    <Project Path="src/Cosmos.Network.Ftp/Cosmos.Network.Ftp.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/CosmosFtpServer.Tests/CosmosFtpServer.Tests.csproj" />
+    <Project Path="tests/Cosmos.Network.Ftp.Tests/Cosmos.Network.Ftp.Tests.csproj" />
   </Folder>
 </Solution>

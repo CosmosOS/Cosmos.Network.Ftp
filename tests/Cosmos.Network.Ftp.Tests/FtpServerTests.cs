@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Threading;
 using NUnit.Framework;
 
-namespace CosmosFtpServer.Tests;
+namespace Cosmos.Network.Ftp.Tests;
 
 /// <summary>
 /// Drives a server listening on loopback, serving a fresh temporary

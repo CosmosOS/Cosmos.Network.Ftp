@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace CosmosFtpServer;
+namespace Cosmos.Network.Ftp;
 
 /// <summary>
 /// The paths a client sees: rooted at <c>/</c>, which is the server's root

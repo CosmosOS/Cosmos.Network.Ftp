@@ -13,13 +13,13 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <IsAotCompatible>true</IsAotCompatible>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RootNamespace>CosmosFtpServer</RootNamespace>
+    <RootNamespace>Cosmos.Network.Ftp</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>CosmosFtpServer</PackageId>
+    <PackageId>Cosmos.Network.Ftp</PackageId>
     <Version>2.0.0</Version>
-    <Title>CosmosFtpServer</Title>
+    <Title>Cosmos.Network.Ftp</Title>
     <Authors>Cosmos</Authors>
     <Company>Cosmos</Company>
     <Description>FTP server for Cosmos Gen3 kernels.</Description>
@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="CosmosFtpServer.Tests" />
+    <InternalsVisibleTo Include="Cosmos.Network.Ftp.Tests" />
   </ItemGroup>
 
 </Project>

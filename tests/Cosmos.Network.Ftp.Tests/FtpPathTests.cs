@@ -2,7 +2,7 @@
 
 using NUnit.Framework;
 
-namespace CosmosFtpServer.Tests;
+namespace Cosmos.Network.Ftp.Tests;
 
 public class FtpPathTests
 {

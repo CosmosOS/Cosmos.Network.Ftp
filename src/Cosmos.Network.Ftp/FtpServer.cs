@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace CosmosFtpServer;
+namespace Cosmos.Network.Ftp;
 
 /// <summary>
 /// An FTP server (RFC 959) that serves a directory tree. <see cref="Listen"/>

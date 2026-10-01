@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace CosmosFtpServer;
+namespace Cosmos.Network.Ftp;
 
 /// <summary>
 /// Formats directory entries for <c>LIST</c>, in the <c>ls -l</c> form FTP

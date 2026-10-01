@@ -1,7 +1,7 @@
 <h1 align="center">CosmosFTP Server 🚀</h1>
 <p>
-  <a href="https://www.nuget.org/packages/CosmosFtpServer/" target="_blank">
-    <img alt="Version" src="https://img.shields.io/nuget/v/CosmosFtpServer.svg" />
+  <a href="https://www.nuget.org/packages/Cosmos.Network.Ftp/" target="_blank">
+    <img alt="Version" src="https://img.shields.io/nuget/v/Cosmos.Network.Ftp.svg" />
   </a>
   <a href="https://github.com/CosmosOS/CosmosFtp/blob/main/LICENSE.txt" target="_blank">
     <img alt="License: BSD Clause 3 License" src="https://img.shields.io/badge/license-BSD License-yellow.svg" />
@@ -10,7 +10,7 @@
 
 > CosmosFTP is an FTP server made in C# for the Cosmos operating system construction kit.
 
-Version 2 is for **Cosmos Gen3** kernels (NativeAOT). It is a plain .NET library over `System.Net.Sockets` and `System.IO`, which a Gen3 kernel runs on its own network stack and VFS. For Cosmos Gen2 (`Cosmos.System2`), use CosmosFtpServer 1.x.
+Version 2 is for **Cosmos Gen3** kernels (NativeAOT). It is a plain .NET library over `System.Net.Sockets` and `System.IO`, which a Gen3 kernel runs on its own network stack and VFS. For Cosmos Gen2 (`Cosmos.System2`), use Cosmos.Network.Ftp 1.x.
 
 ## Usage
 
@@ -18,7 +18,7 @@ Add the package to your kernel .csproj:
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="CosmosFtpServer" Version="2.0.0" />
+    <PackageReference Include="Cosmos.Network.Ftp" Version="2.0.0" />
 </ItemGroup>
 ```
 
@@ -26,7 +26,7 @@ The kernel needs networking and storage (`CosmosEnableNetwork`, `CosmosEnableSto
 
 ```csharp
 using System.Threading;
-using CosmosFtpServer;
+using Cosmos.Network.Ftp;
 
 FtpServer server = new("/mnt")
 {

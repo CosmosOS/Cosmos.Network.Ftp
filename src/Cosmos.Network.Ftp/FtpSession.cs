@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace CosmosFtpServer;
+namespace Cosmos.Network.Ftp;
 
 /// <summary>
 /// One client: its control connection, its login, its working directory and

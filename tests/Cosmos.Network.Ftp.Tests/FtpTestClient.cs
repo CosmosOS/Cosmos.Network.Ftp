@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using NUnit.Framework;
 
-namespace CosmosFtpServer.Tests;
+namespace Cosmos.Network.Ftp.Tests;
 
 /// <summary>
 /// A bare FTP client over a socket, so the tests see the server's replies
