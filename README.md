@@ -22,7 +22,7 @@ Add the package to your kernel .csproj:
 </ItemGroup>
 ```
 
-The kernel needs an IP configuration (DHCP or static) and a mounted filesystem. `Listen()` serves every client on the calling thread until `Close()` is called, so start it on a thread of its own to keep your shell:
+The kernel needs networking and storage (`CosmosEnableNetwork`, `CosmosEnableStorage`, both on by default), an IP configuration (DHCP or static) and a mounted filesystem. `Listen()` serves every client on the calling thread until `Close()` is called, so start it on a thread of its own to keep your shell:
 
 ```csharp
 using System.Threading;
