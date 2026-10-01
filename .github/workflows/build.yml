@@ -1,0 +1,65 @@
+# Builds, tests and packs on every push and pull request. A tag named
+# v<version> (e.g. v2.0.1) also publishes that version to nuget.org through
+# Trusted Publishing: no API key is stored, the publish job trades GitHub's
+# OIDC token for a short-lived nuget.org key.
+#
+# The nuget.org Trusted Publishing policy must name this file (build.yml).
+
+name: Build
+
+on:
+  push:
+    branches: [main, gen3]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Test
+        run: dotnet test CosmosFtp.slnx -c Release
+
+      # On a release tag the tag names the version; otherwise the .csproj does.
+      - name: Pack
+        run: |
+          args=()
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            args+=("-p:Version=${GITHUB_REF_NAME#v}")
+          fi
+          dotnet pack src/Cosmos.Network.Ftp/Cosmos.Network.Ftp.csproj -c Release -o artifacts "${args[@]}"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: nupkg
+          path: artifacts/*.nupkg
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # lets NuGet/login request GitHub's OIDC token
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: nupkg
+          path: artifacts
+
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }} # nuget.org profile name, not email
+
+      - name: Push to nuget.org
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json
